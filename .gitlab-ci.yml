@@ -1,0 +1,35 @@
+stages:
+  - fmt
+  - validate
+  - plan
+
+variables:
+  TF_ROOT: "environments/dev"
+
+before_script:
+  - echo $GOOGLE_CREDENTIALS | base64 --decode > /tmp/google-credentials.json
+  - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/google-credentials.json"
+  - apk add --no-cache curl unzip
+  - curl -o terraform.zip https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+  - unzip terraform.zip && mv terraform /usr/local/bin/
+  - terraform -version
+
+fmt:
+  stage: fmt
+  script:
+    - cd $TF_ROOT
+    - terraform fmt -check
+
+validate:
+  stage: validate
+  script:
+    - cd $TF_ROOT
+    - terraform init -backend=false
+    - terraform validate
+
+plan:
+  stage: plan
+  script:
+    - cd $TF_ROOT
+    - terraform init
+    - terraform plan -var-file="terraform.tfvars"
