@@ -9,11 +9,12 @@ variables:
   TF_ROOT: "environments/dev"
 
 before_script:
-  - echo $GOOGLE_CREDENTIALS | base64 --decode > /tmp/google-credentials.json
+  - echo $GOOGLE_CREDENTIALS | base64 -d > /tmp/google-credentials.json
   - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/google-credentials.json"
   - curl -o terraform.zip https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
   - unzip terraform.zip && mv terraform /usr/local/bin/
   - terraform -version
+
 
 fmt:
   stage: fmt
