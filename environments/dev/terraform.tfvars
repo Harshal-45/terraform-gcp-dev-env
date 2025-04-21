@@ -1,2 +1,5 @@
 bucket_name = "tf-practice-bucket-harshal"
 location    = "US"
+project_id       = "your-gcp-project-id"
+credentials_file = "/tmp/google-credentials.json"
+region           = "us-central1"
